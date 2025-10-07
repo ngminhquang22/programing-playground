@@ -5,7 +5,4 @@ c = "1"
 d = true
 e = '1'
 arr = [a,b,c,d,e]
-
-for i in arr
-    println(typeof(i))
-end
+println("hello")
