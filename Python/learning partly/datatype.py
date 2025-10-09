@@ -3,6 +3,6 @@
 #   set   -> {}: unordered, immutable, can add/remove, can't be duplicated
 #   tuple -> (): ordered, unchangeable, can be duplicated
 
-# a list containing tuples
+# a list containing tuples islike a 2d array
 x = [(1,2), (0,0), (2,3)]
-print(type(x[0]))
+print(x[0][0])
