@@ -1,0 +1,109 @@
+books = {}          # All books in library
+issued_books = {}   # Which student has borrowed which books
+
+def add_book():
+    title = input("Enter Book Title: ")
+    author = input("Enter Author: ")
+    copies = int(input("Enter Number of Copies: "))
+    if title in books:
+        books[title]['copies'] += copies
+    else:
+        books[title] = {'author': author, 'copies': copies}
+    print(f"Book '{title}' added/updated successfully!")
+
+def display_books():
+    if not books:
+        print("No books in library.")
+        return
+    print("\n--- Books in Library ---")
+    for title, info in books.items():
+        print(f"Title: {title}, Author: {info['author']}, Copies Available: {info['copies']}")
+
+def issue_book():
+    student_id = input("Enter Student ID: ")
+    title = input("Enter Book Title to Issue: ")
+    
+    if title not in books:
+        print("Book not found in library!")
+        return
+    if books[title]['copies'] <= 0:
+        print("No copies available!")
+        return
+    
+    books[title]['copies'] -= 1
+    issued_books.setdefault(student_id, []).append(title)
+    print(f"Book '{title}' issued to student {student_id}.")
+
+def return_book():
+    student_id = input("Enter Student ID: ")
+    title = input("Enter Book Title to Return: ")
+    
+    if student_id in issued_books and title in issued_books[student_id]:
+        issued_books[student_id].remove(title)
+        books[title]['copies'] += 1
+        print(f"Book '{title}' returned by student {student_id}.")
+    else:
+        print("No record found of this book being issued to this student.")
+
+def search_book():
+    choice = input("Search by (1) Title or (2) Author? ")
+    if choice == '1':
+        title = input("Enter Book Title: ").lower()
+        found = False
+        for t, info in books.items():
+            if t.lower() == title:
+                print(f"Title: {t}, Author: {info['author']}, Copies: {info['copies']}")
+                found = True
+        if not found:
+            print("Book not found!")
+    elif choice == '2':
+        author = input("Enter Author Name: ").lower()
+        found = False
+        for t, info in books.items():
+            if info['author'].lower() == author:
+                print(f"Title: {t}, Author: {info['author']}, Copies: {info['copies']}")
+                found = True
+        if not found:
+            print("No books by this author found!")
+    else:
+        print("Invalid choice!")
+
+def display_issued_books():
+    if not issued_books:
+        print("No books issued yet.")
+        return
+    print("\n--- Issued Books ---")
+    for sid, titles in issued_books.items():
+        print(f"Student ID: {sid}, Books: {', '.join(titles)}")
+
+# --- Main Menu ---
+while True:
+    print("""
+--- Library Management System ---
+1. Add Book
+2. Display All Books
+3. Issue Book
+4. Return Book
+5. Search Book
+6. Display Issued Books
+7. Exit
+""")
+    choice = input("Enter your choice: ")
+    
+    if choice == '1':
+        add_book()
+    elif choice == '2':
+        display_books()
+    elif choice == '3':
+        issue_book()
+    elif choice == '4':
+        return_book()
+    elif choice == '5':
+        search_book()
+    elif choice == '6':
+        display_issued_books()
+    elif choice == '7':
+        print("Exiting system. Goodbye!")
+        break
+    else:
+        print("Invalid choice! Try again.")
